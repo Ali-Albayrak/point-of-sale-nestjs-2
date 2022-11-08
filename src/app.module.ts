@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Category } from './products/categories/Category';
+import { Product } from './products/Product';
 import { ProductsModule } from './products/products.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
@@ -13,9 +14,9 @@ import { UsersModule } from './users/users.module';
       host: 'localhost',
       port: 3307,
       username: 'root',
-      password: 'darsh123',
-      database: 'PoS',
-      entities: [Category],
+      password: 'root',
+      database: 'my_test',
+      entities: [Category,Product],
       synchronize: true,
     }),    
     ProductsModule,    

@@ -1,7 +1,6 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Patch, Post, Res,  } from '@nestjs/common';
 import { getDataSourceName, InjectRepository } from '@nestjs/typeorm';
-import { Response } from 'express';
-import { get } from 'http';
+import { response } from 'express';
 import { Repository } from 'typeorm';
 import { CategoriesService } from './categories.service';
 import { Category } from './Category';
@@ -11,43 +10,42 @@ export class CategoriesController {
 
     constructor(
         @InjectRepository(Category)
-        private categorysRepository: Repository<Category>){ }
+        private CategorysRepository: Repository<Category>,
+        private categoriesService: CategoriesService){ }
     
     @Get(":id")
-    GetById(@Param() params) {
-        const result = this.categorysRepository.findOneBy({id:params.id});
-        return result;
+    async GetById(@Param() params) {
+        return this.categoriesService.getById(params.id);
     }
 
+    @HttpCode(200)
     @Get()
     GetAll() {
-        return this.categorysRepository.find();
+        return this.categoriesService.getAll();
     }
     
+    @HttpCode(201)
     @Post()
-    Create(@Body()item:Category):boolean{
-        this.categorysRepository.save(item);
-        console.log(item);
-        return true;        
+    Create(@Body()item:Category): Promise<Category>{
+        let res = this.categoriesService.create(item);
+        if(!res){
+            throw new HttpException("400 Bad Request: something went wrong",HttpStatus.BAD_REQUEST);
+        }
+        return res;
     }
 
+    @HttpCode(200)
     @Patch(":id")
     async Update(@Param() params, @Body()item:Category) {
-        
-        let result = await this.categorysRepository.createQueryBuilder()
-        .update("category")
-        .set({id: params.id,...item})
-        .where("id = :id", { id: params.id })
-        .execute();
-        if(result.affected == 0){
-            console.warn("there is no such category ID");
+        let res = this.categoriesService.Update(params.id,item);
+        if (!res){
+            throw new HttpException("404 Not Found: there is no such category ID",HttpStatus.NOT_FOUND);  
         }
         return true;
     }
 
     @Delete(":id")
-    Delete(@Param() params){
-        this.categorysRepository.delete({id:params.id});
-        return true;
+    delete(@Param() params){
+        return this.categoriesService.delete(params.id);
     }
 }
