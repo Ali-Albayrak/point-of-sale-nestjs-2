@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CategoriesController } from './products/categories/categories.controller';
 import { Category } from './products/categories/Category';
+import { Product } from './products/Product';
 import { ProductsModule } from './products/products.module';
 
 @Module({
@@ -15,7 +16,7 @@ import { ProductsModule } from './products/products.module';
       username: 'root',
       password: 'root',
       database: 'my_test',
-      entities: [Category],
+      entities: [Category,Product],
       synchronize: true,
     }),
     
