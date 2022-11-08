@@ -16,13 +16,6 @@ export class CategoriesController {
     @Get(":id")
     async GetById(@Param() params) {
         return this.categoriesService.getById(params.id);
-        // const result = await this.CategorysRepository.findOneBy({id:params.id});
-        // // console.log(result);
-        // if(!result){
-        //     console.warn("there is no such category ID");
-        //     return false;
-        // }
-        // return result;
     }
 
     @HttpCode(200)
@@ -38,7 +31,7 @@ export class CategoriesController {
         if(!res){
             throw new HttpException("400 Bad Request: something went wrong",HttpStatus.BAD_REQUEST);
         }
-        return res     
+        return res;
     }
 
     @HttpCode(200)
@@ -46,7 +39,7 @@ export class CategoriesController {
     async Update(@Param() params, @Body()item:Category) {
         let res = this.categoriesService.Update(params.id,item);
         if (!res){
-            throw new HttpException("404 Not Found: there is no such category ID",HttpStatus.NOT_FOUND);            
+            throw new HttpException("404 Not Found: there is no such category ID",HttpStatus.NOT_FOUND);  
         }
         return true;
     }
@@ -54,7 +47,5 @@ export class CategoriesController {
     @Delete(":id")
     delete(@Param() params){
         return this.categoriesService.delete(params.id);
-        // this.CategorysRepository.delete({id:params.id});
-        // return true;
     }
 }

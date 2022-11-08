@@ -1,3 +1,4 @@
+
 import { IsNotEmpty, IsNumber } from "class-validator";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Product } from "../Product";
@@ -7,7 +8,7 @@ export class Category {
   // @IsNumber()
   @PrimaryGeneratedColumn()
   id: number;
-
+  
   @IsNotEmpty()
   @Column()
   name: string;
@@ -22,3 +23,4 @@ export class Category {
   @OneToMany(() => Product, (product) => product.category_id)
   products: Product[]  
 }
+
